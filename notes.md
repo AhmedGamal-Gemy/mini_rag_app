@@ -37,6 +37,8 @@ but this only can make errors because there's no file .env tracked in git. To so
 27. Remember this status from fastapi and this JSONResponse.
 28. It's far more effient for file uploading to split it chunk by chunk and to do this. you should use.
 29. Don't forget to specify the mode of read in file.
+30. Do logging do logging do logging. do it like this. 
+31. Remember it's try except not try catch 
 
 # In requirements notes 
 1. Leave a line in the end of the file. (If you didn't do this and when anyone add another package he will make a new line (\n) so the previous line go updated as well )
