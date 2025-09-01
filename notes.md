@@ -35,6 +35,8 @@ but this only can make errors because there's no file .env tracked in git. To so
 25. For better coordanation and understanding you should return signal ( not true or false only ) what is true ? what is false ? and a neat trick is python can return multilple things not only one.
 26. Make sure if there's some constant in the code make it a variable and store it to retrieve it every time you need it. the best way to store it is enums.
 27. Remember this status from fastapi and this JSONResponse.
+28. It's far more effient for file uploading to split it chunk by chunk and to do this. you should use.
+29. Don't forget to specify the mode of read in file.
 
 # In requirements notes 
 1. Leave a line in the end of the file. (If you didn't do this and when anyone add another package he will make a new line (\n) so the previous line go updated as well )
