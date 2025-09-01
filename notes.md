@@ -1,7 +1,10 @@
 # General Notes 
 1. You can make git leave out certain files and folders and you can put all these files in a folder named assets.
 2. The configs are typically placed in .env like project name or an api secret key. and typically all capital and _ between the word. and the configs is either string or number only.
-but this only can make errors because there's no file .env tracked in git. To solve this you should make an exact copy of it and name it .env.example without any secrets of course like api key 
+but this only can make errors because there's no file .env tracked in git. To solve this you should make an exact copy of it and name it .env.example without any secrets of course like api key.
+3. You can make a collection in postman and even set variables to easily change it like the pain localhost:8000 and that by variables tab in the program.
+4. If you want the server to automaticaly save every change in the app you can add --reload to the normal run 'uvicorn main:app' and if you want to expose this api to different users in the same network you can add --host (and the ip of that user without parnthses ) if you want all users just use --host 0.0.0.0 and if you want to change the port use --port.
+5. Remember FastAPI came with swagger docs you can access it using 127.0.0.1/docs
 
 # In requirements notes 
 1. Leave a line in the end of the file. (If you didn't do this and when anyone add another package he will make a new line (\n) so the previous line go updated as well )
