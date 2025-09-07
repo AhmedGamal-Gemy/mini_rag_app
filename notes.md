@@ -38,7 +38,23 @@ but this only can make errors because there's no file .env tracked in git. To so
 28. It's far more effient for file uploading to split it chunk by chunk and to do this. you should use.
 29. Don't forget to specify the mode of read in file.
 30. Do logging do logging do logging. do it like this. 
-31. Remember it's try except not try catch 
+31. Remember it's try except not try catch.
+32. We can validate and force certain schemes in the request using pydantic. the same idea of settings.
+33. LangChain is like a pipeline that some chains can take a document and split it and even answer a question but in production this not effient and moreover not customizable. We can take some compononts only in this chain like document loader
+34. Remember any constants it's better to store it in enum to better control and call it.
+35. After loading documents we should split the content into chunks 
+36. Recursively split by character is good as it don't split in the middle of a word or important sentence
+37. chunk_size is the size as obvious and chunk_overlap is that it gets back a number of chars as the splitter can split in the middle of an important information
+38. Remember the loader returns document and the splitter works on text. remember this.
+39. Remember in the text splitter it's called chunk_overlap not overlap_size.
+40. When beginning a new docker compose file (That take multiple services and make them work together) we begin with services:
+41. Important note how to write ports in docker to actually communicate with what inside the container from my machine is like this `- "the_port_in_my_machine:the_port_inside_container"` like for example if I'm create mongodb container and I want it on my machine with port 7415 i can do it like this `- "7415:27017"`
+42. And like the ports like the volumes ( or where the data is) in the right what path inside the container in the left what path outside on my machine like this 
+`- "./mongodb:/data/db"`
+43. Don't forget to gitignore this data folder.
+44. You should declare a network for the service you create
+45. If you want to auto restart the service if it fails.
+46. You can up the service by simply right click the docker-compose file and in the bottom there are compose options.
 
 # In requirements notes 
 1. Leave a line in the end of the file. (If you didn't do this and when anyone add another package he will make a new line (\n) so the previous line go updated as well )

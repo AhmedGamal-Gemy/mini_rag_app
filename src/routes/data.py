@@ -4,8 +4,8 @@ from helpers.config import get_settings, Settings
 import os
 import aiofiles
 from models import ResponseSignal
-
-from controllers import DataController, ProjectController
+from controllers import DataController, ProjectController, ProcessController
+from .schemes.data import ProcessingRequest
 
 import logging
 
@@ -56,11 +56,38 @@ async def upload_data(project_id : str, file : UploadFile,
     return JSONResponse(
             status_code = status.HTTP_200_OK,
             content = {
-                "signal" : ResponseSignal.FILE_UPLOAD_SUCCESS.value
+                "signal" : ResponseSignal.FILE_UPLOAD_SUCCESS.value,
+                "file_id" : file_id
             }
         )
 
+@data_router.post("/process/{project_id}")
+async def process(project_id : str, process_request : ProcessingRequest): # A must to validate the request
+    
+    file_id = process_request.file_id
+    chunk_size = process_request.chunk_size
+    overlap_size = process_request.overlap_size
+
+
+    process_controller = ProcessController( project_id )
+
+    file_content = process_controller.get_file_content( file_id = file_id )
+
+    file_chunks = process_controller.process_file_content(file_content= file_content, 
+                                                          file_id = file_id, chunk_size = chunk_size, 
+                                                          overlap_size=overlap_size)
+    
+    if file_chunks is None or len(file_chunks) == 0:
+        return JSONResponse(
+            statuscode = status.HTTP_400_BAD_REQUEST,
+            content = {
+                "signnal" : ResponseSignal.PROCESSING_FAILED.value
+            }
+        )
+    return file_chunks
 
 
 
 
+
+    
