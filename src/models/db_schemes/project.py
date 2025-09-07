@@ -5,7 +5,7 @@ from pydantic_settings import SettingsConfigDict
 
 class Project(BaseModel):
     _id : Optional[ObjectId]
-    project : Field(..., min_length = 1)
+    project_id : str = Field(..., min_length = 1)
 
     model_config = SettingsConfigDict(
         env_file=".env",

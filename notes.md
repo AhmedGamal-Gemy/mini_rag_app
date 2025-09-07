@@ -61,6 +61,19 @@ but this only can make errors because there's no file .env tracked in git. To so
 50. Fast api events are awesome search about them.
 51. You can make scheme like when we created settings. and you can make your own validator inside the scheme class.
 52. A very important note is that pydantic is not allowing different types by default You should put it in the config from the beginning.
+53. I don't know why specifily he created project and chunk schemes before create baseDataModel and collections
+54. A neat trick that when we store into the database we take an object of the scheme to make sure all fields existed.
+55. Remember when inserting the data should be dict in insert_one func
+56. Remeber if it's async then we should await
+57. in pydantic `.dict()` is depricated use `model_dump()` instead.
+58. Every document create in Mongo if success will return inserted_id
+59. In motor find_one() we pass dict as for what to search like this `{ "id" : id }`
+60. Very Important note. to convert from dict to any model for example Project we can do it this way `Project(**data)`.
+61. Be careful when creating get all. You should make Pagination.
+62. Cursor is like someone who knows where the data will stop in the page and you just should follow him.
+63. If you put request in the parameters of the router function this mean you want every detail of the request INCLUDING app
+64. The fucking on_event is deprecated you can use lifespan instead
+
 
 
 
