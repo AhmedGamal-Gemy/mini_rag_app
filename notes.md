@@ -55,6 +55,14 @@ but this only can make errors because there's no file .env tracked in git. To so
 44. You should declare a network for the service you create
 45. If you want to auto restart the service if it fails.
 46. You can up the service by simply right click the docker-compose file and in the bottom there are compose options.
+47. You can fucking simply use vs code to compose the container up.
+48. Motor is recommended as it has good async capabilities.
+49. A neat trick is that you can attach something in app and all that use app can see and interact with this thing like this `app.mongo_conn = bla`
+50. Fast api events are awesome search about them.
+51. You can make scheme like when we created settings. and you can make your own validator inside the scheme class.
+52. A very important note is that pydantic is not allowing different types by default You should put it in the config from the beginning.
+
+
 
 # In requirements notes 
 1. Leave a line in the end of the file. (If you didn't do this and when anyone add another package he will make a new line (\n) so the previous line go updated as well )
