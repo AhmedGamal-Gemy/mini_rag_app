@@ -2,7 +2,7 @@
 
 This is a minimal implementation of the RAG model for question answering 
 
-## Requirments
+## Requirements
 
 - Python 3.12 or later
 
@@ -41,3 +41,34 @@ cp .env.example .env
 ```
 
 Set your environment variables in the `.env` file. like the api keys
+
+## Run Docker Compose Services
+
+### Secure the secrets inside docker
+
+```bash
+$ cd docker
+$ cp .env.example .env 
+```
+
+- Update `.env` with your credentials
+
+
+### How to run the docker services
+
+```bash
+$ sudo docker compose up -d
+```
+
+## Run the server 
+
+```bash
+$ uvicorn main:app --reload --port 8463 --host 0.0.0.0
+```
+
+- uvicorn is the server and must be installed in the system using the requirements.
+- main:app is FastAPI app inside the main.py file. The starting point.
+- --reload is argument for detecting changes and auto restart the app instead of manually restarting it.
+- --port is which port to serve.
+- --host is what IPs that can access the server. 0.0.0.0 is like saying all IPs can enter
+

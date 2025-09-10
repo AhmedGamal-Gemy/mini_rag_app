@@ -7,6 +7,9 @@ from models import ResponseSignal
 from controllers import DataController, ProjectController, ProcessController
 from .schemes.data import ProcessingRequest
 from models.ProjectDataModel import ProjectDataModel
+from models.ChunkDataModel import ChunkDataModel
+from models.db_schemes import Chunk
+from bson.objectid import ObjectId
 
 import logging
 
@@ -17,7 +20,7 @@ data_router = APIRouter(
 )
 
 @data_router.post("/upload/{project_id}")
-async def upload_data(request : Request ,project_id : str, file : UploadFile,
+async def upload_data(request : Request, project_id : str, file : UploadFile,
                       app_settings : Settings = Depends(get_settings)):
     
     project_model = ProjectDataModel(
@@ -39,7 +42,6 @@ async def upload_data(request : Request ,project_id : str, file : UploadFile,
             }
         )
         
-    
     project_dir_path = ProjectController().get_project_path(project_id = project_id)
     
     file_path, file_id = data_controller.generate_unique_filepath(
@@ -70,12 +72,21 @@ async def upload_data(request : Request ,project_id : str, file : UploadFile,
         )
 
 @data_router.post("/process/{project_id}")
-async def process(project_id : str, process_request : ProcessingRequest): # A must to validate the request
+async def process(request : Request ,project_id : str, process_request : ProcessingRequest): # A must to validate the request
     
     file_id = process_request.file_id
     chunk_size = process_request.chunk_size
     overlap_size = process_request.overlap_size
+    do_reset = process_request.do_reset
 
+    project_model = ProjectDataModel(
+            db_client= request.app.db_client
+        )
+    chunk_model = ChunkDataModel(
+            db_client= request.app.db_client
+        )
+
+    project = await project_model.get_project_or_create_one(project_id = project_id)
 
     process_controller = ProcessController( project_id )
 
@@ -89,10 +100,34 @@ async def process(project_id : str, process_request : ProcessingRequest): # A mu
         return JSONResponse(
             statuscode = status.HTTP_400_BAD_REQUEST,
             content = {
-                "signnal" : ResponseSignal.PROCESSING_FAILED.value
+                "signal" : ResponseSignal.PROCESSING_FAILED.value
             }
         )
-    return file_chunks
+
+    file_chunks_records = [
+        Chunk(
+            chunk_text = chunk.page_content,
+            chunk_metadata = chunk.metadata,
+            chunk_order = index+1,
+            chunk_project_id = ObjectId(project.id),
+        )
+        for index, chunk in enumerate(file_chunks)
+    ]
+
+    if do_reset == 1:
+        print("RESET IS 1")
+        _ = await chunk_model.delete_chunks_by_project_id( project.id )
+
+    no_records = await chunk_model.create_many_chunks(file_chunks_records)
+
+
+    return JSONResponse(
+        status_code= status.HTTP_201_CREATED,
+        content= {
+            "signal" : ResponseSignal.PROCESSING_SUCCESS.value,
+            "inserted_chunks" : no_records  
+        }
+    )
 
 
 

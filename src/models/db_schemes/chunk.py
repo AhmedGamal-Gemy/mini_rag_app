@@ -2,9 +2,10 @@ from pydantic import BaseModel, Field
 from typing import Optional
 from bson.objectid import ObjectId
 from pydantic_settings import SettingsConfigDict
+from pymongo import IndexModel
 
 class Chunk(BaseModel):
-    _id : Optional[ObjectId]
+    id : Optional[ObjectId] = Field(None, alias="_id")
     
     chunk_text : str = Field(..., min_length = 1)
     chunk_metadata : dict
@@ -15,3 +16,13 @@ class Chunk(BaseModel):
         env_file=".env",
         arbitrary_types_allowed = True,
         )
+    
+        
+    @classmethod
+    def get_indexes(cls):
+        return [
+
+            IndexModel( [ ("chunk_project_id", 1) ], name = "chunk_project_id_index_1", unique = False ),
+            #     key ( or keys ) and asc or des in tuple      name for the index    should this key be unique                                    
+        
+        ] 

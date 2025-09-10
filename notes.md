@@ -72,7 +72,47 @@ but this only can make errors because there's no file .env tracked in git. To so
 61. Be careful when creating get all. You should make Pagination.
 62. Cursor is like someone who knows where the data will stop in the page and you just should follow him.
 63. If you put request in the parameters of the router function this mean you want every detail of the request INCLUDING app
-64. The fucking on_event is deprecated you can use lifespan instead
+64. The fucking on_event is deprecated you can use lifespan instead.
+65. Like in get all data remember also to make something to batch insert or create because it's ineffient to do otherwise. We can do so using bulk_write but this function takes a list of operations definations like InsertOne from pymongo which define the function but not run it.
+66. Very important in pydantic if the variable name begins with _ like `_id`. it treats it as private so you can access it from the outside. You can solve this problem by using alias in Field. so you rename it without _ and then set alias to it with _ like this `id : Optional[ObjectId] = Field(None, alias="_id")` But this can lead to some problems as now id is always setted with None so motor (mongo) will not return id for the operation and object we can solve this using parameters from where the CRUD functions are ( which is models in MVC arch )
+67. Things you always forget to access mongo from the terminal you can use `mongosh --port port_of_container` and to show all databases names you can write it like this `show dbs` and to show collections inside a specfic databse you should switch your work to this database first using `use database_name` and then you can show all collections by `show collections` and to get all documents in a collection you can write `db.collection_name.find()`.
+68. It's prefered to name detete function (and i think find too) by the factor of deletion like this `delete_chunk_by_project_id.
+69. To add credentials for mongodb in docker you can use 
+```
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME = username
+      - MONGO_INITDB_ROOT_PASSWORD = password
+
+```
+70. But you defiently can't put secrets like username and password directly in docker file and moreover every user has different credintials so it should be put in `.env` (in the folder of docker a new `.env`) and don't forget to add the new thing to `.env.example`. 
+71. and when putting the secrets in the docker compose we put it like this `MONGO_INITDB_ROOT_PASSWORD = ${name_of_env_varible}`.
+72. In most cases there are some changes that we do in docker and sometimes we want to start over from the beginning. to do this we can run the following commands
+```bash
+$ sudo docker stop $(sudo docker ps -aq)
+$ sudo docker rm $(sudo docker ps -aq)
+$ sudo docker rmi $(sudo docker images -aq)
+$ sudo docker volume rm $(sudo docker volume ls -q)
+$ sudo docker system prune --all
+```
+and be careful this happens only in development not production
+73. WHAT THE FUCK ? okay calm down. in docker compose file you should either key-value mapping without - or fuck leave it but with = between key, value instead of :. so either this `mongo_username : shit` or `-mongo_username = shit`
+74. To avoid any future problem in the connection to mongodb you can use the following url `mongosh "mongodb://gemy:123@localhost:7412/?authSource=admin"` where gemy:123 is username : password and authSource is where to authenticate these credantials agains which database. 
+75. Storing and retriving data from the database is like a book with million page if we have million record in the tradetional way it loop in each record and check you with me ? yes append him and next no ? don't append next. indexing solves this issue. by like exactly in the indexing of book. each topic begins with page number and next topic with another page number. so when requiring some topic then go the page number of it. It's exactly the same idea.
+76. Static function ( inside class ) we can access without defining object from the class and doing that by add a decorator `@classmethod`.
+77. You can use two indexes in one if two conditions always happens together this make it more effient and to use two indexes in one is creating a list of dictionaries with the number of indexes and conditions.
+78. Remember indexing is either ascending ( 1 ) or descending ( -1 ).
+79. Every index should have three important things which are key,name,unique like this 
+    {
+        "key": [
+            ("project_id", 1)
+        ],
+        "name": "project_id_index_1",
+        "unique": True
+    }
+80. Something self studied. Asyncio motor will be deprecated in 2026 so it's better to migrate to PyMongo Async API. and here's how to migrate : https://www.mongodb.com/docs/languages/python/pymongo-driver/current/reference/migration/
+81. Be careful that `__init__()` cannot be async. if you want to call async function inside it you can simply escape calling the async function inside `__init__()` and make a third static function to call both of them the `__init__()` and the async function and for sure the third function will be async
+82. Don't forget to await any async.
+83. The on_event is deprecated like i mentioned above and the current way is using lifespan. We pass to the FastAPI object lifespan parameter which can be a function of the decorator `asynccontextmanager` and we name the function for example `async def lifespan(app: FastAPI). and we put yield in the function every thing BEFORE yield will be executed BEFORE the app start reciving requests and everything AFTER yield will be executed AFTER the app ends. 
 
 
 

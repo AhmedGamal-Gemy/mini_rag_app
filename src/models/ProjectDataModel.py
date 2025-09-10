@@ -8,10 +8,11 @@ class ProjectDataModel(BaseDataModel):
     def __init__(self, db_client : object):
         super().__init__(db_client=db_client)
         self.collection = self.db_client[DatabaseEnum.COLLECTION_PROJECT_NAME.value]
-    
+
+
     async def create_project(self, project : Project):
         
-        result = await self.collection.insert_one( project.model_dump() )
+        result = await self.collection.insert_one( project.model_dump(by_alias=True, exclude_unset= True) )
         project._id = result.inserted_id
         
         return project
