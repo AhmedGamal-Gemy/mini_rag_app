@@ -10,7 +10,78 @@
 			"name": "welcome",
 			"request": {
 				"method": "GET",
-				"header": []
+				"header": [],
+				"url": {
+					"raw": "{{api}}/api/v1",
+					"host": [
+						"{{api}}"
+					],
+					"path": [
+						"api",
+						"v1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Upload File",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/home/ahmedgamal/Downloads/sample1.txt"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{api}}/api/v1/data/upload/100",
+					"host": [
+						"{{api}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"data",
+						"upload",
+						"100"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "processing",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"file_id\": \"2ybmx16q4tnj_sample1.txt\",\n    \"chunk_size\": 100,\n    \"overlap_size\" : 20,\n    \"do_reset\" : 1\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{api}}/api/v1/data/process/100",
+					"host": [
+						"{{api}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"data",
+						"process",
+						"100"
+					]
+				}
 			},
 			"response": []
 		}

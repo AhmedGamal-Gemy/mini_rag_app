@@ -113,9 +113,12 @@ and be careful this happens only in development not production
 81. Be careful that `__init__()` cannot be async. if you want to call async function inside it you can simply escape calling the async function inside `__init__()` and make a third static function to call both of them the `__init__()` and the async function and for sure the third function will be async
 82. Don't forget to await any async.
 83. The on_event is deprecated like i mentioned above and the current way is using lifespan. We pass to the FastAPI object lifespan parameter which can be a function of the decorator `asynccontextmanager` and we name the function for example `async def lifespan(app: FastAPI). and we put yield in the function every thing BEFORE yield will be executed BEFORE the app start reciving requests and everything AFTER yield will be executed AFTER the app ends. 
-
-
-
+84. `datetime.utcnow()` is now deprecated and the replacment is `datetime.now(timezone.utc)`
+85. To get all documents from pymongo with find. we write `find(bla bla bla).toList(length = None)` length is the how many documents do you want to return.
+86. A funny bug. Remeber in pydantic we don't initilize the class just putting the fields.
+87. Some advanced bug i think. pydantic can't understand enum with it's default settings. we should pass mode = "json" and make the enum inherit from both str AND Enum.
+88. Be careful when creating indexes make sure to start over because the collection may have some records violating the index.
+89
 
 # In requirements notes 
 1. Leave a line in the end of the file. (If you didn't do this and when anyone add another package he will make a new line (\n) so the previous line go updated as well )

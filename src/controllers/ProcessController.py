@@ -35,6 +35,8 @@ class ProcessController(BaseController):
     
     def get_file_content(self, file_id : str):
 
+        print(f'file id inside processController is {file_id}')
+        
         loader = self.get_file_loader(file_id=file_id)
         return loader.load()
     
