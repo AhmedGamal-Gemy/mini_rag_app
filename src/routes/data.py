@@ -68,7 +68,7 @@ async def upload_data(request : Request, project_id : str, file : UploadFile,
     print(f'what is project id from inside upload_data ? {str(project.project_id)}')
 
     asset = Asset(
-            asset_project_id = str(project.id),
+            asset_project_id = str(project.project_id),
             asset_type = AssetTypeEnum.FILE.value,
             asset_name = file_id,
             asset_size = file.size,
@@ -86,7 +86,7 @@ async def upload_data(request : Request, project_id : str, file : UploadFile,
             status_code = status.HTTP_200_OK,
             content = {
                 "signal" : ResponseSignal.FILE_UPLOAD_SUCCESS.value,
-                "file_id" : str(asset_record.id),
+                "file_id" : str(asset_record.asset_name),
             }
         )
 
@@ -168,7 +168,7 @@ async def process_all(request : Request ,project_id : str, process_request : Pro
 
     project = await project_model.get_project_or_create_one(project_id = project_id)
 
-    all_assets = await asset_model.get_all_assets_by_project_id_type( project.id, AssetTypeEnum.FILE )
+    all_assets = await asset_model.get_all_assets_by_project_id_type( project.project_id, AssetTypeEnum.FILE )
 
     file_names = [ str( asset.asset_name ) for asset in all_assets ]
 
@@ -176,9 +176,9 @@ async def process_all(request : Request ,project_id : str, process_request : Pro
 
     no_all_chunks = 0
 
-    if do_reset == 1:
-        print("RESET IS 1")
-        _ = await chunk_model.delete_chunks_by_project_id( project.id )
+    # if do_reset == 1:
+    #     print("RESET IS 1")
+    #     _ = await chunk_model.delete_chunks_by_project_id( project.id )
 
     print(f"Found {len(all_assets)} assets for project {project_id}")
 
